@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/Class22B_And_1_PacmanGame/src/main/res/drawable/ic_down_arrow.xml" value="0.1235" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/Class22B_And_1_PacmanGame/src/main/res/layout/activity_main.xml" value="0.152" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable-v24/heart__1_.xml" value="0.196" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/arrow.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/arrow_up.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/cardiogram.xml" value="0.196" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/down_arrow__1_.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/football__1_.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/football_field.xml" value="0.124" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/green_arrow_up.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/heart__1_.xml" value="0.144" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/heart__3_.xml" value="0.264" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/heart_rate_1.xml" value="0.196" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/ic_down_arrow.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/ic_launcher_background.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/ic_left_arrow.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/ic_red_heart.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/ic_red_heart_24dp.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/ic_right_arrow.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/ic_up_arrow.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/image2vector.xml" value="0.196" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/redHeart.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/red_heart.xml" value="0.196" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/right_arrow.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/right_arrow__1_.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/soccer.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/soccer_ball.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/triumph_soccer_ball_symbol.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/drawable/up_arrow.xml" value="0.293" />
+        <entry key="..\:/Users/omer_/AndroidStudioProjects/MyPackman/app/src/main/res/layout/activity_main.xml" value="0.2" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
