@@ -151,59 +151,9 @@ public class activity_main extends AppCompatActivity {
     }
 
 
-    //Timer Functions
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(timerStatus == TIMER_STATUS.OFF){
-            startTimer();
-        } else if(timerStatus == TIMER_STATUS.RUNNING ){
-            stopTimer();
-        }else{
-            startTimer();
-        }
-    }
 
-    private void startTimer() {
-        timerStatus = TIMER_STATUS.RUNNING;
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tick();
-                        runLogic();
-                    }
-                });
 
-            }
-        }, 0, DELAY);
-
-    }
-    private void tick() {
-        ++counter;
-        main_LBL_time.setText("" + counter);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(timerStatus == TIMER_STATUS.RUNNING){
-            stopTimer();
-            timerStatus = TIMER_STATUS.PAUSE;
-        }
-    }
-
-    private void stopTimer() {
-        timerStatus = TIMER_STATUS.OFF;
-        timer.cancel();
-
-    }
-
-    //Logic Functions
-    public void runLogic(){
+    public void movement(){
         moveRival();
         movePlayer();
         checkLocations();
@@ -297,14 +247,11 @@ public class activity_main extends AppCompatActivity {
         }
 
     }
-    // Rival functions
     private int getRandomRivalDirection(){
         RIVAL_DIRECTION = (int) (Math.random() * 4); // 4 directions
         return RIVAL_DIRECTION;
     }
 
-
-    //Loss function
     private void checkLocations()
     {
         if((rival.getX() == player.getX()) && (rival.getY() == player.getY()))
@@ -353,7 +300,56 @@ public class activity_main extends AppCompatActivity {
     }
 
 
+    //Timer Functions
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(timerStatus == TIMER_STATUS.OFF){
+            startTimer();
+        } else if(timerStatus == TIMER_STATUS.RUNNING ){
+            stopTimer();
+        }else{
+            startTimer();
+        }
+    }
 
+    private void startTimer() {
+        timerStatus = TIMER_STATUS.RUNNING;
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tick();
+                        movement();
+                    }
+                });
+
+            }
+        }, 0, DELAY);
+
+    }
+    private void tick() {
+        ++counter;
+        main_LBL_time.setText("" + counter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(timerStatus == TIMER_STATUS.RUNNING){
+            stopTimer();
+            timerStatus = TIMER_STATUS.PAUSE;
+        }
+    }
+
+    private void stopTimer() {
+        timerStatus = TIMER_STATUS.OFF;
+        timer.cancel();
+
+    }
 
 
 }
