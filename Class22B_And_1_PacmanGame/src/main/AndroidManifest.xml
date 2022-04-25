@@ -11,10 +11,10 @@
         android:theme="@style/Theme.MyPackman">
         <meta-data
             android:name="com.google.android.actions"
-            android:resource="@layout/activity_main" />
+            android:resource="@layout/welcome_page" />
 
         <activity
-            android:name=".activity_main"
+            android:name=".Controlers_activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

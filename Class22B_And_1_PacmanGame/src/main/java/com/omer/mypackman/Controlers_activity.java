@@ -12,7 +12,7 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class activity_main extends AppCompatActivity {
+public class Controlers_activity extends AppCompatActivity {
     //Final Variables
     public static final int LEFT = 0;
     public static final int UP = 1;
@@ -23,6 +23,8 @@ public class activity_main extends AppCompatActivity {
     public static final int PLAYER_START_POS_Y = 1;
     public static final int RIVAL_START_POS_X = 0;
     public static final int RIVAL_START_POS_Y = 0;
+    public static final int COIN_POS_X = 4;
+    public static final int COIN_POS_Y = 4;
 
     public static int PLAYER_DIRECTION = -1;
     public static int RIVAL_DIRECTION = -1;
@@ -44,7 +46,7 @@ public class activity_main extends AppCompatActivity {
     private Timer timer = new Timer();
     private final int DELAY = 1000;
     private int counter = 0;
-    private MaterialTextView main_LBL_time;
+    private MaterialTextView main_LBL_score;
     private enum TIMER_STATUS{
         OFF,
         RUNNING,
@@ -55,11 +57,18 @@ public class activity_main extends AppCompatActivity {
     //Players
     private Player player;
     private Player rival;
+    private Bitcoin bitcoin;
+    private StepDetector stepDetector;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.controlers_activity);
+        stepDetector = new StepDetector();
+        stepDetector.start();
         InitGameView();
     }
 
@@ -69,15 +78,17 @@ public class activity_main extends AppCompatActivity {
         panel_IMG_background = findViewById(R.id.panel_IMG_background);
 
         //Timer
-        main_LBL_time = findViewById(R.id.main_LBL_score);
+        main_LBL_score = findViewById(R.id.main_LBL_score);
 
         //Panel
         panelGame = new ImageView[][]{
-                {findViewById(R.id.panel_IMG_00),findViewById(R.id.panel_IMG_01),findViewById(R.id.panel_IMG_02)},
-                {findViewById(R.id.panel_IMG_10),findViewById(R.id.panel_IMG_11),findViewById(R.id.panel_IMG_12)},
-                {findViewById(R.id.panel_IMG_20),findViewById(R.id.panel_IMG_21),findViewById(R.id.panel_IMG_22)},
-                {findViewById(R.id.panel_IMG_30),findViewById(R.id.panel_IMG_31),findViewById(R.id.panel_IMG_32)},
-                {findViewById(R.id.panel_IMG_40),findViewById(R.id.panel_IMG_41),findViewById(R.id.panel_IMG_42)},
+                {findViewById(R.id.panel_IMG_00),findViewById(R.id.panel_IMG_01),findViewById(R.id.panel_IMG_02),findViewById(R.id.panel_IMG_03),findViewById(R.id.panel_IMG_04)},
+                {findViewById(R.id.panel_IMG_10),findViewById(R.id.panel_IMG_11),findViewById(R.id.panel_IMG_12),findViewById(R.id.panel_IMG_13),findViewById(R.id.panel_IMG_14)},
+                {findViewById(R.id.panel_IMG_20),findViewById(R.id.panel_IMG_21),findViewById(R.id.panel_IMG_22),findViewById(R.id.panel_IMG_23),findViewById(R.id.panel_IMG_24)},
+                {findViewById(R.id.panel_IMG_30),findViewById(R.id.panel_IMG_31),findViewById(R.id.panel_IMG_32),findViewById(R.id.panel_IMG_33),findViewById(R.id.panel_IMG_34)},
+                {findViewById(R.id.panel_IMG_40),findViewById(R.id.panel_IMG_41),findViewById(R.id.panel_IMG_42),findViewById(R.id.panel_IMG_43),findViewById(R.id.panel_IMG_44)},
+                {findViewById(R.id.panel_IMG_50),findViewById(R.id.panel_IMG_51),findViewById(R.id.panel_IMG_52),findViewById(R.id.panel_IMG_53),findViewById(R.id.panel_IMG_54)},
+                {findViewById(R.id.panel_IMG_60),findViewById(R.id.panel_IMG_61),findViewById(R.id.panel_IMG_62),findViewById(R.id.panel_IMG_63),findViewById(R.id.panel_IMG_64)},
 
         };
 
@@ -102,6 +113,9 @@ public class activity_main extends AppCompatActivity {
         player = new Player(PLAYER_START_POS_X, PLAYER_START_POS_Y,PLAYER_DIRECTION);
         rival = new Player(RIVAL_START_POS_X, RIVAL_START_POS_Y,RIVAL_DIRECTION);
 
+        // coin
+        bitcoin = new Bitcoin(COIN_POS_X, COIN_POS_Y);
+
         //Player
         panelGame[player.getX()][player.getY()].setImageResource(R.drawable.ic_soccer_player);
         panelGame[player.getX()][player.getY()].setVisibility(View.VISIBLE);
@@ -109,10 +123,13 @@ public class activity_main extends AppCompatActivity {
         //Rival
         panelGame[rival.getX()][rival.getY()].setImageResource(R.drawable.ic_referee);
         panelGame[rival.getX()][rival.getY()].setVisibility(View.VISIBLE);
+
+        //coin
+        panelGame[bitcoin.getX()][bitcoin.getY()].setImageResource(R.drawable.ic_bitcoin);
+        panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.VISIBLE);
     }
 
     private void InitArrowsButtons() {
-        //Each time the player changes the direction of his movement, the rival also changes the direction of his movement randomly
         //Left
         panel_IMG_arrows[0].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +173,28 @@ public class activity_main extends AppCompatActivity {
     public void movement(){
         moveRival();
         movePlayer();
+        if(stepDetector.getStepCount()%10==0){
+            moveCoin();
+        }
+        if ((bitcoin.getX() == player.getX()) && (bitcoin.getY() == player.getY())){
+            moveCoinIfPlayerCaught();
+            stepDetector.setStepCount(0);
+            updateScore();
+        }
+        if ((bitcoin.getX() == rival.getX()) && (bitcoin.getY() == rival.getY())){
+            updateScoreRivalHit();
+            stepDetector.setStepCount(0);
+        }
         checkLocations();
+    }
+
+    private void updateScoreRivalHit() {
+        if(counter<100){
+            counter = 0;
+        }
+        else{
+            counter-=100;
+        }
     }
 
     //Move Functions
@@ -247,6 +285,32 @@ public class activity_main extends AppCompatActivity {
         }
 
     }
+    private void moveCoin() {
+        panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.INVISIBLE);
+        bitcoin.setX((int) (Math.random() * 7));
+        bitcoin.setY((int) (Math.random() * 5));
+        panelGame[bitcoin.getX()][bitcoin.getY()].setImageResource(R.drawable.ic_bitcoin);
+        panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.VISIBLE);
+    }
+    private void moveCoinIfPlayerCaught() {
+        panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.INVISIBLE);
+        int tempX,tempY;
+        tempX = bitcoin.getX();
+        tempY = bitcoin.getY();
+        player.setX(tempX);
+        player.setY(tempY);
+        panelGame[player.getX()][player.getY()].setVisibility(View.VISIBLE);
+        bitcoin.setX((int) (Math.random() * 7));
+        bitcoin.setY((int) (Math.random() * 5));
+        panelGame[bitcoin.getX()][bitcoin.getY()].setImageResource(R.drawable.ic_bitcoin);
+        panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.VISIBLE);
+
+    }
+
+    private void updateScore() {
+        counter += 1000;
+        main_LBL_score.setText("" + counter);
+    }
     private int getRandomRivalDirection(){
         RIVAL_DIRECTION = (int) (Math.random() * 4); // 4 directions
         return RIVAL_DIRECTION;
@@ -264,7 +328,8 @@ public class activity_main extends AppCompatActivity {
                 setPlayersOnStartingPoint();
 
 
-            } else {
+            }
+            else {
                 panel_IMG_balls[0].setVisibility(View.INVISIBLE);
                 stopTimer();
                 panelGame[player.getX()][player.getY()].setVisibility(View.INVISIBLE);
@@ -281,7 +346,6 @@ public class activity_main extends AppCompatActivity {
 
             }
         }
-
     }
 
     private void setPlayersOnStartingPoint(){
@@ -306,6 +370,7 @@ public class activity_main extends AppCompatActivity {
         super.onStart();
         if(timerStatus == TIMER_STATUS.OFF){
             startTimer();
+
         } else if(timerStatus == TIMER_STATUS.RUNNING ){
             stopTimer();
         }else{
@@ -324,6 +389,7 @@ public class activity_main extends AppCompatActivity {
                     public void run() {
                         tick();
                         movement();
+
                     }
                 });
 
@@ -332,9 +398,13 @@ public class activity_main extends AppCompatActivity {
 
     }
     private void tick() {
-        ++counter;
-        main_LBL_time.setText("" + counter);
+
+            ++counter;
+            main_LBL_score.setText("" + counter);
+
+
     }
+
 
     @Override
     protected void onStop() {
