@@ -14,7 +14,7 @@
             android:resource="@layout/welcome_page" />
 
         <activity
-            android:name=".Controlers_activity"
+            android:name=".Welcome_Activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

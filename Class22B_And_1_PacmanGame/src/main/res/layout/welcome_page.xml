@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    tools:context=".Welcome_Activity"
+    android:background="@drawable/ic_crowd">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,10 +14,11 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22dp"
+            android:textSize="20dp"
             android:text="WELCOME TO THE SOCCER GAME"
             android:textStyle="bold"
             android:layout_margin="20dp"
+            android:textColor="@color/white"
             />
 
         <LinearLayout
@@ -40,7 +42,7 @@
                     android:inputType="text" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/main_BTN_send"
+                    android:id="@+id/main_BTN_enter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="enter"
@@ -48,6 +50,7 @@
                     android:layout_weight="1"
                     app:cornerRadius="15dp"
                     android:layout_margin="10dp"
+                    android:backgroundTint="#00ff00"
                     />
             </LinearLayout>
             <com.google.android.material.textview.MaterialTextView
@@ -70,26 +73,38 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/main_BTN_sensorsGame"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="sensors game"
+                android:layout_height="70dp"
+                app:icon="@drawable/ic_sensors"
+                app:iconSize="50dp"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
                 android:layout_gravity="center"
                 app:cornerRadius="15dp"
+                android:backgroundTint="#00ff00"
                 />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/main_BTN_controlsGame"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="controls game"
+                android:layout_height="70dp"
+                app:icon="@drawable/ic_controllers"
+                app:iconSize="50dp"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
                 android:layout_gravity="center"
                 app:cornerRadius="15dp"
+                android:backgroundTint="#00ff00"
                 />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/main_BTN_topTen"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="top_10"
+                android:layout_height="70dp"
+                app:icon="@drawable/ic_top_ten"
+                app:iconSize="50dp"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
                 android:layout_gravity="center"
                 app:cornerRadius="15dp"
+                android:backgroundTint="#00ff00"
                 />
 
         </LinearLayout>
