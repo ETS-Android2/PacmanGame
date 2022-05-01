@@ -1,6 +1,14 @@
 package com.omer.mypackman;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.hardware.SensorPrivacyManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -12,7 +20,7 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Controlers_activity extends AppCompatActivity {
+public class Main_activity extends AppCompatActivity {
     //Final Variables
     public static final int LEFT = 0;
     public static final int UP = 1;
@@ -47,6 +55,10 @@ public class Controlers_activity extends AppCompatActivity {
     private final int DELAY = 1000;
     private int counter = 0;
     private MaterialTextView main_LBL_score;
+    private int sensorFlag;
+    private Sounds_Manager gameSound;
+    private Sesnors_Manager sensors;
+
     private enum TIMER_STATUS{
         OFF,
         RUNNING,
@@ -59,20 +71,87 @@ public class Controlers_activity extends AppCompatActivity {
     private Player rival;
     private Bitcoin bitcoin;
     private StepDetector stepDetector;
+  //  private eGameKind gameKind;
 
 
-
+    private SensorManager sensorManager;
+    private Sensor sensor;
+//    SensorEventListener accSensorEventListener;
+    private String game;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.controlers_activity);
-        stepDetector = new StepDetector();
-        stepDetector.start();
-        InitGameView();
+        if (getIntent().getBundleExtra("Bundle") != null) {
+            this.bundle = getIntent().getBundleExtra("Bundle");
+        } else {
+            this.bundle = new Bundle();
+        }
+        game = bundle.getString("game");
+        if (game.equals("buttons")) {
+            setContentView(R.layout.controlers_activity);
+            InitGameView();
+            InitArrowsButtons();
+        } else {
+            setContentView(R.layout.sensors_activity);
+            sensorFlag = 1;
+            InitGameView();
+            sensors = new Sesnors_Manager();
+            initSensors();
+        }
+        gameSound = new Sounds_Manager();
     }
 
+    private void initSensors() {
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensors.setSensorManager(sensorManager);
+        sensors.initSensor();
+    }
+
+    private SensorEventListener accSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            float x = sensorEvent.values[0];
+            float y = sensorEvent.values[1];
+
+            if (x < -5) {// move right
+                RIVAL_DIRECTION = getRandomRivalDirection();
+                PLAYER_DIRECTION = RIGHT;
+            } else if (x > 5) {// move left
+                RIVAL_DIRECTION = getRandomRivalDirection();
+                PLAYER_DIRECTION = LEFT;
+            } else if (y < -3) {// move up
+                RIVAL_DIRECTION = getRandomRivalDirection();
+                PLAYER_DIRECTION = UP;
+            } else if (y > 5) {// move down
+                RIVAL_DIRECTION = getRandomRivalDirection();
+                PLAYER_DIRECTION = DOWN;
+            }
+        }
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+        }
+    };
+    protected void onResume() {
+        super.onResume();
+        if(sensorFlag == 1) {
+            sensorManager.registerListener(accSensorEventListener, sensors.getAccSensor(), SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (sensorFlag == 1) {
+            sensorManager.unregisterListener(accSensorEventListener);
+        }
+    }
+
+
     //Init Functions
+
     private void InitGameView() {
         //Background
         panel_IMG_background = findViewById(R.id.panel_IMG_background);
@@ -340,6 +419,7 @@ public class Controlers_activity extends AppCompatActivity {
                     @Override
                     public void run() {
                         finish();
+                        replaceActivity();
                     }
                 }, 1000);
 
@@ -347,7 +427,11 @@ public class Controlers_activity extends AppCompatActivity {
             }
         }
     }
-
+    private void replaceActivity() {
+        Intent intent = new Intent(this,top_ten.class);
+        intent.putExtra("Bundle",bundle);
+        startActivity(intent);
+    }
     private void setPlayersOnStartingPoint(){
 
         player.setX(PLAYER_START_POS_X);

@@ -8,6 +8,8 @@ public class Game_Manager {
     public static final int ROWS = 7;
 
     private int lives = MAX_LIVES;
+    private String userName;
+    private int score;
 
     //Default Constructor
     public Game_Manager() {
@@ -35,4 +37,19 @@ public class Game_Manager {
         return MAX_LIVES;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }

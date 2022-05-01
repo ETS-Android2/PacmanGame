@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="WELCOME TO THE SOCCER GAME"
+            android:text="@string/welcome_to_the_soccer_game"
             android:textStyle="bold"
             android:layout_margin="20dp"
             android:textColor="@color/white"
@@ -36,7 +36,7 @@
                     android:id="@+id/main_EDT_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="enter your name"
+                    android:hint="@string/enter_your_name"
                     android:layout_weight="2"
                     android:layout_margin="20dp"
                     android:inputType="text" />
@@ -45,7 +45,7 @@
                     android:id="@+id/main_BTN_enter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="enter"
+                    android:text="@string/enter"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     app:cornerRadius="15dp"
@@ -53,14 +53,7 @@
                     android:backgroundTint="#00ff00"
                     />
             </LinearLayout>
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/main_LBL_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_gravity="start"
-                android:layout_margin="15dp"
-                />
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
