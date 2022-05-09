@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".top_ten"
+    tools:context=".activities.top_ten_activity"
     android:keepScreenOn="true"
     >
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="@string/records_list"
-            android:textColor="#1F378A"
+            android:text="Records List"
+            android:textColor="#FFF000"
             android:textSize="23sp" />
 
 
@@ -31,16 +32,15 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="#45454545" />
+            android:layout_weight="1" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/game_top_ten_LBL_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/google_map"
-            android:textColor="#1F378A"
+            android:text="Google Map"
+            android:textColor="#FFF000"
             android:textSize="23sp" />
 
 

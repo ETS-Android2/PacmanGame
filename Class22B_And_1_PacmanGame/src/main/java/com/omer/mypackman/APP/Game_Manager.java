@@ -1,9 +1,9 @@
-package com.omer.mypackman;
+package com.omer.mypackman.APP;
 
 public class Game_Manager {
 
     //Final variables
-    public static final int MAX_LIVES = 3;
+    public static final int MAX_LIVES = 1;
     public static final int COLUMNS = 5;
     public static final int ROWS = 7;
 

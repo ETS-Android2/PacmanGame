@@ -1,21 +1,38 @@
-package com.omer.mypackman;
+package com.omer.mypackman.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.hardware.SensorPrivacyManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.Gson;
+import com.omer.mypackman.APP.Game_Manager;
+import com.omer.mypackman.gps.Location_Manager;
+import com.omer.mypackman.DB.MSP;
+import com.omer.mypackman.R;
+import com.omer.mypackman.objects.Bitcoin;
+import com.omer.mypackman.objects.Player;
+import com.omer.mypackman.objects.Records;
+import com.omer.mypackman.objects.Sensors;
+import com.omer.mypackman.objects.Sounds_Manager;
+import com.omer.mypackman.objects.StepDetector;
+import com.omer.mypackman.DB.myDataBase;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,8 +61,7 @@ public class Main_activity extends AppCompatActivity {
 
     private ImageButton[] panel_IMG_arrows;
 
-    //Game Manager
-    private final Game_Manager gameManager = new Game_Manager();
+
 
     //Panel
     private ImageView[][] panelGame;
@@ -57,7 +73,7 @@ public class Main_activity extends AppCompatActivity {
     private MaterialTextView main_LBL_score;
     private int sensorFlag;
     private Sounds_Manager gameSound;
-    private Sesnors_Manager sensors;
+
 
     private enum TIMER_STATUS{
         OFF,
@@ -70,42 +86,51 @@ public class Main_activity extends AppCompatActivity {
     private Player player;
     private Player rival;
     private Bitcoin bitcoin;
-    private StepDetector stepDetector;
-  //  private eGameKind gameKind;
+    private StepDetector stepDetector = new StepDetector();
 
-
-    private SensorManager sensorManager;
-    private Sensor sensor;
-//    SensorEventListener accSensorEventListener;
+    private final myDataBase myDB = myDataBase.initMyDB();
+    private Location_Manager location_Manager;
+    private Sensors sensors;
+    private SensorManager sensor_manager;
     private String game;
     private Bundle bundle;
-
+    private final Game_Manager gameManager = new Game_Manager();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent().getBundleExtra("Bundle") != null) {
+        if (getIntent().getBundleExtra("Bundle") != null){
             this.bundle = getIntent().getBundleExtra("Bundle");
+            gameManager.setUserName(bundle.getString("fromMenu"));
         } else {
             this.bundle = new Bundle();
         }
         game = bundle.getString("game");
-        if (game.equals("buttons")) {
+        if(game.equals("buttons")){
             setContentView(R.layout.controlers_activity);
             InitGameView();
             InitArrowsButtons();
-        } else {
+        }else{
             setContentView(R.layout.sensors_activity);
             sensorFlag = 1;
             InitGameView();
-            sensors = new Sesnors_Manager();
+            sensors = new Sensors();
             initSensors();
         }
         gameSound = new Sounds_Manager();
+        location_Manager = new Location_Manager(this);
+        //----- Get Location use permission and check -----
+        try {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initSensors() {
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        sensors.setSensorManager(sensorManager);
+        sensor_manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensors.setSensorManager(sensor_manager);
         sensors.initSensor();
     }
 
@@ -116,16 +141,16 @@ public class Main_activity extends AppCompatActivity {
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
 
-            if (x < -5) {// move right
+            if (x < -3.5) {// move right
                 RIVAL_DIRECTION = getRandomRivalDirection();
                 PLAYER_DIRECTION = RIGHT;
-            } else if (x > 5) {// move left
+            } else if (x > 3.5) {// move left
                 RIVAL_DIRECTION = getRandomRivalDirection();
                 PLAYER_DIRECTION = LEFT;
             } else if (y < -3) {// move up
                 RIVAL_DIRECTION = getRandomRivalDirection();
                 PLAYER_DIRECTION = UP;
-            } else if (y > 5) {// move down
+            } else if (y > 3) {// move down
                 RIVAL_DIRECTION = getRandomRivalDirection();
                 PLAYER_DIRECTION = DOWN;
             }
@@ -137,7 +162,7 @@ public class Main_activity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(sensorFlag == 1) {
-            sensorManager.registerListener(accSensorEventListener, sensors.getAccSensor(), SensorManager.SENSOR_DELAY_NORMAL);
+            sensor_manager.registerListener(accSensorEventListener, sensors.getAccSensor(), SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -145,7 +170,7 @@ public class Main_activity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (sensorFlag == 1) {
-            sensorManager.unregisterListener(accSensorEventListener);
+            sensor_manager.unregisterListener(accSensorEventListener);
         }
     }
 
@@ -186,7 +211,10 @@ public class Main_activity extends AppCompatActivity {
                 findViewById(R.id.panel_BTN_down),
                 findViewById(R.id.panel_BTN_right)
         };
-        InitArrowsButtons();
+        if(game.equals("buttons")){
+            InitArrowsButtons();
+        }
+
 
         //Players
         player = new Player(PLAYER_START_POS_X, PLAYER_START_POS_Y,PLAYER_DIRECTION);
@@ -206,6 +234,8 @@ public class Main_activity extends AppCompatActivity {
         //coin
         panelGame[bitcoin.getX()][bitcoin.getY()].setImageResource(R.drawable.ic_bitcoin);
         panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.VISIBLE);
+        stepDetector = new StepDetector();
+        stepDetector.start();
     }
 
     private void InitArrowsButtons() {
@@ -255,28 +285,10 @@ public class Main_activity extends AppCompatActivity {
         if(stepDetector.getStepCount()%10==0){
             moveCoin();
         }
-        if ((bitcoin.getX() == player.getX()) && (bitcoin.getY() == player.getY())){
-            moveCoinIfPlayerCaught();
-            stepDetector.setStepCount(0);
-            updateScore();
-        }
-        if ((bitcoin.getX() == rival.getX()) && (bitcoin.getY() == rival.getY())){
-            updateScoreRivalHit();
-            stepDetector.setStepCount(0);
-        }
+        updateScore();
         checkLocations();
     }
 
-    private void updateScoreRivalHit() {
-        if(counter<100){
-            counter = 0;
-        }
-        else{
-            counter-=100;
-        }
-    }
-
-    //Move Functions
     private void movePlayer() {
         if(lives == 0)
             panelGame[player.getX()][player.getY()].setVisibility(View.INVISIBLE);
@@ -366,29 +378,30 @@ public class Main_activity extends AppCompatActivity {
     }
     private void moveCoin() {
         panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.INVISIBLE);
-        bitcoin.setX((int) (Math.random() * 7));
-        bitcoin.setY((int) (Math.random() * 5));
+        do{
+            bitcoin.setX((int) (Math.random() * gameManager.getROWS()));
+            bitcoin.setY((int) (Math.random() * gameManager.getCOLUMNS()));
+        }while(bitcoin.getX()!= player.getX() && bitcoin.getX()!= rival.getX() && bitcoin.getY()!= rival.getY()&& bitcoin.getY()!= player.getY());
         panelGame[bitcoin.getX()][bitcoin.getY()].setImageResource(R.drawable.ic_bitcoin);
         panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.VISIBLE);
-    }
-    private void moveCoinIfPlayerCaught() {
-        panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.INVISIBLE);
-        int tempX,tempY;
-        tempX = bitcoin.getX();
-        tempY = bitcoin.getY();
-        player.setX(tempX);
-        player.setY(tempY);
-        panelGame[player.getX()][player.getY()].setVisibility(View.VISIBLE);
-        bitcoin.setX((int) (Math.random() * 7));
-        bitcoin.setY((int) (Math.random() * 5));
-        panelGame[bitcoin.getX()][bitcoin.getY()].setImageResource(R.drawable.ic_bitcoin);
-        panelGame[bitcoin.getX()][bitcoin.getY()].setVisibility(View.VISIBLE);
-
     }
 
     private void updateScore() {
-        counter += 1000;
-        main_LBL_score.setText("" + counter);
+        if ((bitcoin.getX() == player.getX()) && (bitcoin.getY() == player.getY())){
+            gameSound.setMpAndPlay((ContextWrapper) getApplicationContext(),R.raw.catch_money);
+            counter += 1000;
+            main_LBL_score.setText("" + counter);
+            Toast.makeText(this,"+1000",Toast.LENGTH_SHORT).show();
+            stepDetector.setStepCount(0);
+        }
+        if ((bitcoin.getX() == rival.getX()) && (bitcoin.getY() == rival.getY())){
+            gameSound.setMpAndPlay((ContextWrapper) getApplicationContext(),R.raw.money_lost);
+            if(counter<50)
+                counter = 0;
+            else
+                counter-=100;
+            stepDetector.setStepCount(0);
+        }
     }
     private int getRandomRivalDirection(){
         RIVAL_DIRECTION = (int) (Math.random() * 4); // 4 directions
@@ -403,9 +416,9 @@ public class Main_activity extends AppCompatActivity {
             if(gameManager.getLives()>1) {
                 gameManager.reduceLives();
                 panel_IMG_balls[gameManager.getLives()].setVisibility(View.INVISIBLE);
-                Toast.makeText(this,"CRASH",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"CRASH" ,Toast.LENGTH_LONG).show();
                 setPlayersOnStartingPoint();
-
+                gameSound.setMpAndPlay((ContextWrapper) getApplicationContext(),R.raw.crash_with_rival);
 
             }
             else {
@@ -413,13 +426,16 @@ public class Main_activity extends AppCompatActivity {
                 stopTimer();
                 panelGame[player.getX()][player.getY()].setVisibility(View.INVISIBLE);
                 Toast.makeText(this,"Game Over",Toast.LENGTH_LONG).show();
-
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        finish();
+                        Records rec = new Records(counter,gameManager.getUserName(),location_Manager.getLon(),location_Manager.getLat());
+                        myDB.addRecord(rec);
+                        String json = new Gson().toJson(myDB);
+                        MSP.getMe().putString("MY_DB", json);
                         replaceActivity();
+                        finish();
                     }
                 }, 1000);
 
@@ -428,7 +444,7 @@ public class Main_activity extends AppCompatActivity {
         }
     }
     private void replaceActivity() {
-        Intent intent = new Intent(this,top_ten.class);
+        Intent intent = new Intent(this, top_ten_activity.class);
         intent.putExtra("Bundle",bundle);
         startActivity(intent);
     }

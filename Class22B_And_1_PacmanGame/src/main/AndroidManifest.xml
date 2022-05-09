@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.omer.mypackman">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
+        android:name=".APP.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,20 +15,25 @@
         android:theme="@style/Theme.MyPackman">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCFbzsG8zok5PVvaJvuF7aIXEW7XyCXG5o" />
+            android:value="AIzaSyBDeteZuR5dGFnPwJqT3mBnYjA90gQ-zIE" />
         <activity
-            android:name=".top_ten"
+            android:name=".activities.top_ten_activity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_activity"
+            android:name=".activities.Welcome_Activity"
             android:exported="true">
+            android:screenOrientation="portrait"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.Main_activity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

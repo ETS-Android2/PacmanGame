@@ -1,7 +1,7 @@
-package com.omer.mypackman;
+package com.omer.mypackman.objects;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-public class Sesnors_Manager {
+public class Sensors {
     private SensorManager sensorManager;
     private Sensor accSensor;
 
@@ -9,10 +9,10 @@ public class Sesnors_Manager {
         return sensorManager;
     }
 
-    public Sesnors_Manager() {
+    public Sensors() {
     }
 
-    public Sesnors_Manager setSensorManager(SensorManager sensorManager) {
+    public Sensors setSensorManager(SensorManager sensorManager) {
         this.sensorManager = sensorManager;
         return this;
     }
@@ -21,7 +21,7 @@ public class Sesnors_Manager {
         return accSensor;
     }
 
-    public Sesnors_Manager setAccSensor(Sensor accSensor) {
+    public Sensors setAccSensor(Sensor accSensor) {
         this.accSensor = accSensor;
         return this;
     }

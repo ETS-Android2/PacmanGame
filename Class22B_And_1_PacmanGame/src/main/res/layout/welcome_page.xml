@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Welcome_Activity"
+    tools:context=".activities.Welcome_Activity"
     android:background="@drawable/ic_crowd">
 
     <LinearLayout
@@ -41,7 +41,7 @@
                     android:layout_margin="20dp"
                     android:inputType="text" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/main_BTN_enter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                     app:cornerRadius="15dp"
                     android:layout_margin="10dp"
                     android:backgroundTint="#00ff00"
-                    />
+                    tools:ignore="MissingClass" />
             </LinearLayout>
 
         </LinearLayout>
@@ -63,7 +63,7 @@
             android:layout_weight="0.1"
             android:padding="16dp">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/main_BTN_sensorsGame"
                 android:layout_width="200dp"
                 android:layout_height="70dp"
@@ -75,7 +75,7 @@
                 app:cornerRadius="15dp"
                 android:backgroundTint="#00ff00"
                 />
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/main_BTN_controlsGame"
                 android:layout_width="200dp"
                 android:layout_height="70dp"
@@ -87,7 +87,7 @@
                 app:cornerRadius="15dp"
                 android:backgroundTint="#00ff00"
                 />
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/main_BTN_topTen"
                 android:layout_width="200dp"
                 android:layout_height="70dp"

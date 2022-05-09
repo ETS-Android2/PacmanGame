@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyPackman</string>
+    <string name="records_list">Records List</string>
+    <string name="google_map">Google Map</string>
+    <string name="welcome_to_the_soccer_game">WELCOME TO THE SOCCER GAME</string>
+    <string name="enter_your_name">enter your name</string>
+    <string name="enter">enter</string>
 </resources>

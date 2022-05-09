@@ -1,4 +1,4 @@
-package com.omer.mypackman;
+package com.omer.mypackman.objects;
 
 import android.os.Handler;
 
